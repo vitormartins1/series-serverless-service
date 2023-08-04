@@ -1,0 +1,212 @@
+{
+  "ModelName": "series-acad-serverless",
+  "ModelMetadata": {
+    "Author": "Vitor Martins",
+    "DateCreated": "Jul 31, 2023, 06:36 PM",
+    "DateLastModified": "Aug 01, 2023, 01:40 PM",
+    "Description": "Series itens organized by instructor and student.",
+    "AWSService": "Amazon DynamoDB",
+    "Version": "3.0"
+  },
+  "DataModel": [
+    {
+      "TableName": "series",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "PK",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "SK",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "username",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "date",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "index-instructor",
+          "AttributeType": "S"
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "all-students-of-an-instructor",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "index-instructor",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "PK",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        },
+        {
+          "IndexName": "all-series-from-instructor-by-student",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "PK",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "index-instructor",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "TableData": [
+        {
+          "PK": {
+            "S": "student#001"
+          },
+          "SK": {
+            "S": "student#001"
+          },
+          "username": {
+            "S": "joel"
+          }
+        },
+        {
+          "PK": {
+            "S": "instructor#001"
+          },
+          "SK": {
+            "S": "instructor#001"
+          },
+          "username": {
+            "S": "mary"
+          },
+          "index-instructor": {
+            "S": "instructor#001"
+          }
+        },
+        {
+          "PK": {
+            "S": "student#001"
+          },
+          "SK": {
+            "S": "serie#001"
+          },
+          "date": {
+            "S": "2021-07-07"
+          },
+          "index-instructor": {
+            "S": "instructor#001"
+          }
+        },
+        {
+          "PK": {
+            "S": "student#001"
+          },
+          "SK": {
+            "S": "serie#002"
+          },
+          "date": {
+            "S": "2021-10-10"
+          },
+          "index-instructor": {
+            "S": "instructor#001"
+          }
+        },
+        {
+          "PK": {
+            "S": "instructor#002"
+          },
+          "SK": {
+            "S": "instructor#002"
+          },
+          "username": {
+            "S": "alan"
+          },
+          "index-instructor": {
+            "S": "instructor#002"
+          }
+        },
+        {
+          "PK": {
+            "S": "student#001"
+          },
+          "SK": {
+            "S": "serie#003"
+          },
+          "date": {
+            "S": "2021-12-12"
+          },
+          "index-instructor": {
+            "S": "instructor#002"
+          }
+        },
+        {
+          "PK": {
+            "S": "student#002"
+          },
+          "SK": {
+            "S": "student#002"
+          },
+          "username": {
+            "S": "rian"
+          }
+        },
+        {
+          "PK": {
+            "S": "student#002"
+          },
+          "SK": {
+            "S": "serie#001"
+          },
+          "date": {
+            "S": "2021-07-07"
+          },
+          "index-instructor": {
+            "S": "instructor#001"
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      },
+      "BillingMode": "PROVISIONED",
+      "ProvisionedCapacitySettings": {
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        },
+        "AutoScalingRead": {
+          "ScalableTargetRequest": {
+            "MinCapacity": 1,
+            "MaxCapacity": 10,
+            "ServiceRole": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+          },
+          "ScalingPolicyConfiguration": {
+            "TargetValue": 70
+          }
+        },
+        "AutoScalingWrite": {
+          "ScalableTargetRequest": {
+            "MinCapacity": 1,
+            "MaxCapacity": 10,
+            "ServiceRole": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+          },
+          "ScalingPolicyConfiguration": {
+            "TargetValue": 70
+          }
+        }
+      }
+    }
+  ]
+}
