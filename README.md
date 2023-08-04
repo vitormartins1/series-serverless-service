@@ -22,15 +22,9 @@ O modelo do CloudFormation contém detalhes de configuração para cada componen
 docker run -d -p 8000:8000 --network=local-acad-serverless-api-network --name dynamo-local amazon/dynamodb-local
 
 sam local start-api --docker-network=local-acad-serverless-api-network
-
-
-
-## Data Modeling
-
-Single table design usign global secondary indexes and usign one to many relationships with secondary index plus query pattern to retrieve data. 
-
-https://www.youtube.com/watch?v=BnDKD_Zv0og
-## Access Patterns
+## Modelagem de Dados
+Single table design usign global secondary indexes and usign one to many relationships with secondary index plus query pattern to retrieve data. https://www.youtube.com/watch?v=BnDKD_Zv0og
+### Padrões de Acesso aos Dados
 
 - Buscar os dados de todos aluno :heavy_check_mark:
 - Buscar os dados de um aluno :heavy_check_mark:
@@ -46,7 +40,13 @@ https://www.youtube.com/watch?v=BnDKD_Zv0og
 | Serie | student#< studentId > | serie#< serieVersion >
 | Instructor | instructor#< instructorId > | instructor#< instructorId > |
  
-Global Secondary Indexes
+Global Secondary Indexes:
+- index-instructor
+
+
+![alt](docs/db-model-01.png)
+![alt](docs/db-model-02.png)
+![alt](docs/db-model-03.png)
 
 ## Ambiente de Desenvolvimento
 
