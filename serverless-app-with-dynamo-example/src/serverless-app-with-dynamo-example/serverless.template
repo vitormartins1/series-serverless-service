@@ -3,7 +3,7 @@
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "An AWS Serverless Application. This template is partially managed by Amazon.Lambda.Annotations (v1.0.0.0).",
   "Resources": {
-    "Get": {
+    "serverlessappwithdynamoexampleFunctionsGetGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
         "Tool": "Amazon.Lambda.Annotations",
@@ -12,7 +12,6 @@
         ]
       },
       "Properties": {
-        "FunctionName": "TestServerless",
         "MemorySize": 256,
         "Timeout": 30,
         "Policies": [
