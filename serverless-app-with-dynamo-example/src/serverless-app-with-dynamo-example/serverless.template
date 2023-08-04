@@ -3,7 +3,37 @@
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "An AWS Serverless Application. This template is partially managed by Amazon.Lambda.Annotations (v1.0.0.0).",
   "Resources": {
-    "serverlessappwithdynamoexampleFunctionsGetGenerated": {
+    "readingListDynamoDBTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "readingList",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "ItemId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "Title",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "ItemId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "Title",
+            "KeyType": "RANGE"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": "1",
+          "WriteCapacityUnits": "1"
+        }
+      }
+    },
+    "serverlessappwithdynamoexampleFunctionsGetAsyncGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
         "Tool": "Amazon.Lambda.Annotations",
@@ -15,13 +45,30 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Policies": [
-          "AWSLambdaBasicExecutionRole"
+          "AWSLambdaBasicExecutionRole",
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:Scan"
+                ],
+                "Resource": {
+                  "Fn::GetAtt": [
+                    "readingListDynamoDBTable",
+                    "Arn"
+                  ]
+                }
+              }
+            ]
+          }
         ],
         "PackageType": "Image",
         "ImageUri": ".",
         "ImageConfig": {
           "Command": [
-            "serverless-app-with-dynamo-example::serverless_app_with_dynamo_example.Functions_Get_Generated::Get"
+            "serverless-app-with-dynamo-example::serverless_app_with_dynamo_example.Functions_GetAsync_Generated::GetAsync"
           ]
         },
         "Events": {

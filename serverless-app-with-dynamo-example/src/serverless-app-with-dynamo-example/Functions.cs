@@ -3,6 +3,9 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Annotations.APIGateway;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
+using Newtonsoft.Json;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
@@ -10,9 +13,6 @@ namespace serverless_app_with_dynamo_example;
 
 public class Functions
 {
-    /// <summary>
-    /// Default constructor that Lambda will invoke.
-    /// </summary>
     public Functions()
     {
     }
@@ -33,12 +33,32 @@ public class Functions
     /// </remarks>
     /// <param name="context">Information about the invocation, function, and execution environment</param>
     /// <returns>The response as an implicit <see cref="APIGatewayProxyResponse"/></returns>
-    [LambdaFunction(PackageType = LambdaPackageType.Image, Policies = "AWSLambdaBasicExecutionRole", MemorySize = 256, Timeout = 30)]
+    [LambdaFunction(
+        PackageType = LambdaPackageType.Image,
+        MemorySize = 256, Timeout = 30)]
     [RestApi(LambdaHttpMethod.Get, "/")]
-    public IHttpResult Get(ILambdaContext context)
+    public async Task<APIGatewayHttpApiV2ProxyResponse> GetAsync(
+        APIGatewayProxyRequest request, 
+        ILambdaContext context)
     {
-        context.Logger.LogInformation("Handling the 'Get' Request");
+        context.Logger.LogInformation("Get Request\n");
 
-        return HttpResults.Ok("Hello AWS Serverless");
+        var response = new APIGatewayHttpApiV2ProxyResponse
+        {
+            StatusCode = (int)HttpStatusCode.OK,
+            Body = await ScanReadingListAsync(),
+            Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } }
+        };
+
+        return response;
+    }
+
+    private async Task<string> ScanReadingListAsync()
+    {
+        using var client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.USEast1);
+
+        var response = await client.ScanAsync(new ScanRequest("readingList"));
+
+        return JsonConvert.SerializeObject(response.Items);
     }
 }
