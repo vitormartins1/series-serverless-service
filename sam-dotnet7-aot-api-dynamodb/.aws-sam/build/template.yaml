@@ -71,6 +71,33 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+  GetStudentsFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: dotnet7
+      SamResourceId: GetStudentsFunction
+    Properties:
+      CodeUri: GetStudentsFunction
+      Handler: bootstrap
+      Runtime: provided.al2
+      Architectures:
+      - x86_64
+      MemorySize: 256
+      Environment:
+        Variables:
+          PARAM1: VALUE
+          TABLE_NAME:
+            Ref: series
+      Policies:
+      - DynamoDBWritePolicy:
+          TableName:
+            Ref: series
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /students
+            Method: get
 Outputs:
   HelloWorldApi:
     Description: API Gateway endpoint URL for Prod stage for Hello World function
@@ -87,4 +114,22 @@ Outputs:
     Value:
       Fn::GetAtt:
       - HelloWorldFunctionRole
+      - Arn
+  GetStudentsFunction:
+    Description: Hello World Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - HelloWorldFunction
+      - Arn
+  GetStudentsFunctionIamRole:
+    Description: Implicit IAM Role created for GetStudentsFunction
+    Value:
+      Fn::GetAtt:
+      - GetStudentsFunctionRole
+      - Arn
+  SeriesTable:
+    Description: DynamoDB table name
+    Value:
+      Fn::GetAtt:
+      - series
       - Arn

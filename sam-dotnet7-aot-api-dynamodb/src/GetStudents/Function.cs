@@ -18,7 +18,7 @@ namespace GetStudents
         /// </summary>
         private static async Task Main()
         {
-            Func<string, ILambdaContext, string> handler = FunctionHandler;
+            Func<APIGatewayHttpApiV2ProxyRequest, ILambdaContext, Task<Student>> handler = GetStudentByIdAsync;
             await LambdaBootstrapBuilder.Create(handler, new SourceGeneratorLambdaJsonSerializer<LambdaFunctionJsonSerializerContext>())
                 .Build()
                 .RunAsync();
@@ -72,16 +72,16 @@ namespace GetStudents
         //    };
         //}
 
-        //public async Task<Student> GetStudentByIdAsync(APIGatewayHttpApiV2ProxyRequest request, ILambdaContext context)
-        //{
-        //    AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-        //    DynamoDBContext dbContext = new DynamoDBContext(client);
-        //    string idFromPath = request.PathParameters["id"];
-        //    int id = Int32.Parse(idFromPath);
-        //    Student student = await dbContext.LoadAsync<Student>(id);
-        //    if (student == null) throw new Exception("Not Found!");
-        //    return student;
-        //}
+        public static async Task<Student> GetStudentByIdAsync(APIGatewayHttpApiV2ProxyRequest request, ILambdaContext context)
+        {
+            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+            DynamoDBContext dbContext = new DynamoDBContext(client);
+            string pkFromPath = "student#001";//request.PathParameters["pk"];
+            string skFromPath = "student#001";//request.PathParameters["sk"];
+            Student student = await dbContext.LoadAsync<Student>(pkFromPath, skFromPath);
+            if (student == null) throw new Exception("Not Found!");
+            return student;
+        }
     }
 
     /// <summary>

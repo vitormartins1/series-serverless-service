@@ -110,6 +110,12 @@ Outputs:
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn
+  GetStudentsFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt HelloWorldFunction.Arn
+  GetStudentsFunctionIamRole:
+    Description: "Implicit IAM Role created for GetStudentsFunction"
+    Value: !GetAtt GetStudentsFunctionRole.Arn
   SeriesTable:
     Description: "DynamoDB table name"
     Value: !GetAtt series.Arn
