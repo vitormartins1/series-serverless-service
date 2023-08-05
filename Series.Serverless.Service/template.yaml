@@ -1,0 +1,89 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Sample SAM Template for Series.Serverless.Service
+
+Globals:
+  Function:
+    Timeout: 100
+
+    Tracing: Active
+  Api:
+    TracingEnabled: true
+Resources:
+  SeriesWebAPIServerless:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: A .NET Core WebAPI App with DynamoDB to manage series.
+        table.
+      CodeUri: ./src/Series.Serverless.Service/
+      Handler: Series.Serverless.Service
+      Runtime: dotnet6
+      MemorySize: 1024
+      Environment:
+        Variables:
+          SAMPLE_TABLE: !Ref SeriesTable
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName: !Ref SeriesTable
+      Events:
+        ProxyResource:
+          Type: HttpApi
+          Properties:
+            PayloadFormatVersion: '2.0'
+            Path: /{proxy+}
+            Method: ANY
+        RootResource:
+          PayloadFormatVersion: '2.0'
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: ANY
+  SeriesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+        - AttributeName: index-instructor
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: all-students-of-an-instructor
+          KeySchema:
+            - AttributeName: index-instructor
+              KeyType: HASH
+            - AttributeName: PK
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - IndexName: all-series-from-instructor-by-student
+          KeySchema:
+            - AttributeName: PK
+              KeyType: HASH
+            - AttributeName: index-instructor
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+      BillingMode: PROVISIONED
+      TableName: SeriesTable
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+Outputs:
+  WebEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
