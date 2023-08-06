@@ -3,7 +3,7 @@
   "ModelMetadata": {
     "Author": "Vitor Martins",
     "DateCreated": "Jul 31, 2023, 06:36 PM",
-    "DateLastModified": "Aug 01, 2023, 01:40 PM",
+    "DateLastModified": "Aug 06, 2023, 07:13 PM",
     "Description": "Series itens organized by instructor and student.",
     "AWSService": "Amazon DynamoDB",
     "Version": "3.0"
@@ -31,36 +31,28 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "index-instructor",
+          "AttributeName": "GSI1PK",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "GSI1SK",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "exercices",
           "AttributeType": "S"
         }
       ],
       "GlobalSecondaryIndexes": [
         {
-          "IndexName": "all-students-of-an-instructor",
+          "IndexName": "GSI1",
           "KeyAttributes": {
             "PartitionKey": {
-              "AttributeName": "index-instructor",
+              "AttributeName": "GSI1PK",
               "AttributeType": "S"
             },
             "SortKey": {
-              "AttributeName": "PK",
-              "AttributeType": "S"
-            }
-          },
-          "Projection": {
-            "ProjectionType": "ALL"
-          }
-        },
-        {
-          "IndexName": "all-series-from-instructor-by-student",
-          "KeyAttributes": {
-            "PartitionKey": {
-              "AttributeName": "PK",
-              "AttributeType": "S"
-            },
-            "SortKey": {
-              "AttributeName": "index-instructor",
+              "AttributeName": "GSI1SK",
               "AttributeType": "S"
             }
           },
@@ -91,7 +83,10 @@
           "username": {
             "S": "mary"
           },
-          "index-instructor": {
+          "GSI1PK": {
+            "S": "instructor#001"
+          },
+          "GSI1SK": {
             "S": "instructor#001"
           }
         },
@@ -100,13 +95,16 @@
             "S": "student#001"
           },
           "SK": {
-            "S": "serie#001"
+            "S": "instructor#001#serie#001"
           },
-          "date": {
-            "S": "2021-07-07"
-          },
-          "index-instructor": {
+          "GSI1PK": {
             "S": "instructor#001"
+          },
+          "GSI1SK": {
+            "S": "student#001#serie#001"
+          },
+          "exercices": {
+            "S": "Carga progressiva A B C"
           }
         },
         {
@@ -114,27 +112,16 @@
             "S": "student#001"
           },
           "SK": {
-            "S": "serie#002"
+            "S": "instructor#001#serie#002"
           },
-          "date": {
-            "S": "2021-10-10"
-          },
-          "index-instructor": {
+          "GSI1PK": {
             "S": "instructor#001"
-          }
-        },
-        {
-          "PK": {
-            "S": "instructor#002"
           },
-          "SK": {
-            "S": "instructor#002"
+          "GSI1SK": {
+            "S": "student#001#serie#002"
           },
-          "username": {
-            "S": "alan"
-          },
-          "index-instructor": {
-            "S": "instructor#002"
+          "exercices": {
+            "S": "Carga progressiva 1 2 3"
           }
         },
         {
@@ -142,13 +129,16 @@
             "S": "student#001"
           },
           "SK": {
-            "S": "serie#003"
+            "S": "instructor#001#serie#003"
           },
-          "date": {
-            "S": "2021-12-12"
+          "GSI1PK": {
+            "S": "instructor#001"
           },
-          "index-instructor": {
-            "S": "instructor#002"
+          "GSI1SK": {
+            "S": "student#001#serie#003"
+          },
+          "exercices": {
+            "S": "Cardio muscular"
           }
         },
         {
@@ -159,7 +149,7 @@
             "S": "student#002"
           },
           "username": {
-            "S": "rian"
+            "S": "lia"
           }
         },
         {
@@ -167,13 +157,78 @@
             "S": "student#002"
           },
           "SK": {
-            "S": "serie#001"
+            "S": "instructor#001#serie#001"
           },
-          "date": {
-            "S": "2021-07-07"
-          },
-          "index-instructor": {
+          "GSI1PK": {
             "S": "instructor#001"
+          },
+          "GSI1SK": {
+            "S": "student#002#serie#001"
+          },
+          "exercices": {
+            "S": "Fisioterapia pernas"
+          }
+        },
+        {
+          "PK": {
+            "S": "student#003"
+          },
+          "SK": {
+            "S": "student#003"
+          },
+          "username": {
+            "S": "ricardo"
+          }
+        },
+        {
+          "PK": {
+            "S": "instructor#002"
+          },
+          "SK": {
+            "S": "instructor#002"
+          },
+          "username": {
+            "S": "isa"
+          },
+          "GSI1PK": {
+            "S": "instructor#002"
+          },
+          "GSI1SK": {
+            "S": "instructor#002"
+          }
+        },
+        {
+          "PK": {
+            "S": "student#003"
+          },
+          "SK": {
+            "S": "instructor#002#serie#001"
+          },
+          "GSI1PK": {
+            "S": "instructor#002"
+          },
+          "GSI1SK": {
+            "S": "student#003#serie#001"
+          },
+          "exercices": {
+            "S": "Extensao de ombros"
+          }
+        },
+        {
+          "PK": {
+            "S": "student#001"
+          },
+          "SK": {
+            "S": "instructor#002#serie#004"
+          },
+          "GSI1PK": {
+            "S": "instructor#002"
+          },
+          "GSI1SK": {
+            "S": "student#001#serie#004"
+          },
+          "exercices": {
+            "S": "Panturrilhas"
           }
         }
       ],

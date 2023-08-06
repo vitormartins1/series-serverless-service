@@ -24,40 +24,24 @@
             "AttributeType": "S"
           },
           {
-            "AttributeName": "index-instructor",
+            "AttributeName": "GSI1PK",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "GSI1SK",
             "AttributeType": "S"
           }
         ],
         "GlobalSecondaryIndexes": [
           {
-            "IndexName": "all-students-of-an-instructor",
+            "IndexName": "GSI1",
             "KeySchema": [
               {
-                "AttributeName": "index-instructor",
+                "AttributeName": "GSI1PK",
                 "KeyType": "HASH"
               },
               {
-                "AttributeName": "PK",
-                "KeyType": "RANGE"
-              }
-            ],
-            "Projection": {
-              "ProjectionType": "ALL"
-            },
-            "ProvisionedThroughput": {
-              "ReadCapacityUnits": 1,
-              "WriteCapacityUnits": 1
-            }
-          },
-          {
-            "IndexName": "all-series-from-instructor-by-student",
-            "KeySchema": [
-              {
-                "AttributeName": "PK",
-                "KeyType": "HASH"
-              },
-              {
-                "AttributeName": "index-instructor",
+                "AttributeName": "GSI1SK",
                 "KeyType": "RANGE"
               }
             ],
@@ -144,12 +128,12 @@
         }
       }
     },
-    "TableseriesIndexallStudentsOfAnInstructorReadCapacityScalableTarget": {
+    "TableseriesIndexGSI1ReadCapacityScalableTarget": {
       "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
       "DependsOn": "series",
       "Properties": {
         "ServiceNamespace": "dynamodb",
-        "ResourceId": "table/series/index/all-students-of-an-instructor",
+        "ResourceId": "table/series/index/GSI1",
         "ScalableDimension": "dynamodb:index:ReadCapacityUnits",
         "MinCapacity": 1,
         "MaxCapacity": 10,
@@ -158,14 +142,14 @@
         }
       }
     },
-    "TableseriesIndexallStudentsOfAnInstructorReadCapacityScalingPolicy": {
+    "TableseriesIndexGSI1ReadCapacityScalingPolicy": {
       "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
-      "DependsOn": "TableseriesIndexall-students-of-an-instructorReadCapacityScalableTarget",
+      "DependsOn": "TableseriesIndexGSI1ReadCapacityScalableTarget",
       "Properties": {
         "ServiceNamespace": "dynamodb",
-        "ResourceId": "table/series/index/all-students-of-an-instructor",
+        "ResourceId": "table/series/index/GSI1",
         "ScalableDimension": "dynamodb:index:ReadCapacityUnits",
-        "PolicyName": "series-index-all-students-of-an-instructor-read-capacity-scaling-policy",
+        "PolicyName": "series-index-GSI1-read-capacity-scaling-policy",
         "PolicyType": "TargetTrackingScaling",
         "TargetTrackingScalingPolicyConfiguration": {
           "PredefinedMetricSpecification": {
@@ -177,12 +161,12 @@
         }
       }
     },
-    "TableseriesIndexallStudentsOfAnInstructorWriteCapacityScalableTarget": {
+    "TableseriesIndexGSI1WriteCapacityScalableTarget": {
       "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
       "DependsOn": "series",
       "Properties": {
         "ServiceNamespace": "dynamodb",
-        "ResourceId": "table/series/index/all-students-of-an-instructor",
+        "ResourceId": "table/series/index/GSI1",
         "ScalableDimension": "dynamodb:index:WriteCapacityUnits",
         "MinCapacity": 1,
         "MaxCapacity": 10,
@@ -191,80 +175,14 @@
         }
       }
     },
-    "TableseriesIndexallStudentsOfAnInstructorWriteCapacityScalingPolicy": {
+    "TableseriesIndexGSI1WriteCapacityScalingPolicy": {
       "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
-      "DependsOn": "TableseriesIndexall-students-of-an-instructorWriteCapacityScalableTarget",
+      "DependsOn": "TableseriesIndexGSI1WriteCapacityScalableTarget",
       "Properties": {
         "ServiceNamespace": "dynamodb",
-        "ResourceId": "table/series/index/all-students-of-an-instructor",
+        "ResourceId": "table/series/index/GSI1",
         "ScalableDimension": "dynamodb:index:WriteCapacityUnits",
-        "PolicyName": "series-index-all-students-of-an-instructor-write-capacity-scaling-policy",
-        "PolicyType": "TargetTrackingScaling",
-        "TargetTrackingScalingPolicyConfiguration": {
-          "PredefinedMetricSpecification": {
-            "PredefinedMetricType": "DynamoDBWriteCapacityUtilization"
-          },
-          "ScaleOutCooldown": 60,
-          "ScaleInCooldown": 60,
-          "TargetValue": 70
-        }
-      }
-    },
-    "TableseriesIndexallSeriesFromInstructorByStudentReadCapacityScalableTarget": {
-      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
-      "DependsOn": "series",
-      "Properties": {
-        "ServiceNamespace": "dynamodb",
-        "ResourceId": "table/series/index/all-series-from-instructor-by-student",
-        "ScalableDimension": "dynamodb:index:ReadCapacityUnits",
-        "MinCapacity": 1,
-        "MaxCapacity": 10,
-        "RoleARN": {
-          "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/dynamodb.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
-        }
-      }
-    },
-    "TableseriesIndexallSeriesFromInstructorByStudentReadCapacityScalingPolicy": {
-      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
-      "DependsOn": "TableseriesIndexall-series-from-instructor-by-studentReadCapacityScalableTarget",
-      "Properties": {
-        "ServiceNamespace": "dynamodb",
-        "ResourceId": "table/series/index/all-series-from-instructor-by-student",
-        "ScalableDimension": "dynamodb:index:ReadCapacityUnits",
-        "PolicyName": "series-index-all-series-from-instructor-by-student-read-capacity-scaling-policy",
-        "PolicyType": "TargetTrackingScaling",
-        "TargetTrackingScalingPolicyConfiguration": {
-          "PredefinedMetricSpecification": {
-            "PredefinedMetricType": "DynamoDBReadCapacityUtilization"
-          },
-          "ScaleOutCooldown": 60,
-          "ScaleInCooldown": 60,
-          "TargetValue": 70
-        }
-      }
-    },
-    "TableseriesIndexallSeriesFromInstructorByStudentWriteCapacityScalableTarget": {
-      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
-      "DependsOn": "series",
-      "Properties": {
-        "ServiceNamespace": "dynamodb",
-        "ResourceId": "table/series/index/all-series-from-instructor-by-student",
-        "ScalableDimension": "dynamodb:index:WriteCapacityUnits",
-        "MinCapacity": 1,
-        "MaxCapacity": 10,
-        "RoleARN": {
-          "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/dynamodb.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
-        }
-      }
-    },
-    "TableseriesIndexallSeriesFromInstructorByStudentWriteCapacityScalingPolicy": {
-      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
-      "DependsOn": "TableseriesIndexall-series-from-instructor-by-studentWriteCapacityScalableTarget",
-      "Properties": {
-        "ServiceNamespace": "dynamodb",
-        "ResourceId": "table/series/index/all-series-from-instructor-by-student",
-        "ScalableDimension": "dynamodb:index:WriteCapacityUnits",
-        "PolicyName": "series-index-all-series-from-instructor-by-student-write-capacity-scaling-policy",
+        "PolicyName": "series-index-GSI1-write-capacity-scaling-policy",
         "PolicyType": "TargetTrackingScaling",
         "TargetTrackingScalingPolicyConfiguration": {
           "PredefinedMetricSpecification": {
