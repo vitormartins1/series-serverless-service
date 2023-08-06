@@ -1,0 +1,28 @@
+{
+	"info": {
+		"_postman_id": "ca294fb1-8a9a-44fd-a754-378a637a2782",
+		"name": "SeriesAPI Serverless Lambda .NET 6",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "18572656"
+	},
+	"item": [
+		{
+			"name": "CreateStudent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Username\": \"Joel\",\r\n    \"IndexInstructor\" : \"instructor#1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://tskgrks4d1.execute-api.us-east-1.amazonaws.com/student"
+			},
+			"response": []
+		}
+	]
+}
