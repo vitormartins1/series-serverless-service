@@ -26,10 +26,8 @@ sam local start-api --docker-network=local-acad-serverless-api-network
 Single table design usign global secondary indexes and usign one to many relationships with secondary index plus query pattern to retrieve data. https://www.youtube.com/watch?v=BnDKD_Zv0og
 ### Padrões de Acesso aos Dados
 
-- Buscar os dados de todos aluno :heavy_check_mark:
 - Buscar os dados de um aluno :heavy_check_mark:
 - Buscar todas as séries de um aluno :heavy_check_mark:
-- Buscar todos os instrutores :heavy_check_mark: 
 - Buscar os dados de um instrutor :heavy_check_mark: 
 - Buscar todos os alunos de um instrutor :heavy_check_mark: 
 - Buscar todos as séries de um instrutor por aluno :heavy_check_mark:
