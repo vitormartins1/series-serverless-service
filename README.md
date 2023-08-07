@@ -39,12 +39,11 @@ Single table design usign global secondary indexes and usign one to many relatio
 | Instructor | instructor#< instructorId > | instructor#< instructorId > |
  
 Global Secondary Indexes:
-- index-instructor
+- GSI1PK
+- GSI1SK
 
-
-![alt](docs/db-model-01.png)
-![alt](docs/db-model-02.png)
-![alt](docs/db-model-03.png)
+![alt](/deploy/series.png)
+![alt](/deploy/GSI_series_GSI1.png)
 
 ## Ambiente de Desenvolvimento
 
