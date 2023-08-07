@@ -28,27 +28,26 @@ namespace SeriesAPI
             _dynamoDBContext = dynamoDBContext;
         }
 
-        [LambdaFunction()]
-        [HttpApi(LambdaHttpMethod.Get, "/")]
-        public string Default()
-        {
-            var docs = @"Serviço de gerenciamento de versões de séries de exercícios entre instrutor e aluno.";
-            return docs;
-        }
-
         [LambdaFunction(ResourceName = "CreateStudentFunction")]
         [HttpApi(LambdaHttpMethod.Post, "/student")]
         public async Task<IHttpResult> CreateStudentAsync([FromBody] Student student, ILambdaContext context)
         {
             string key = $"student#{Guid.NewGuid().ToString()}";
 
-            //var student = JsonSerializer.Deserialize<Student>(request.Body);
-
             student.PK = key;
             student.SK = key;
             await _dynamoDBContext.SaveAsync(student);
 
             return HttpResults.Created(null, student);
+        }
+        
+        [LambdaFunction(ResourceName = "GetStudentsFunction")]
+        [HttpApi(LambdaHttpMethod.Get, "/student")]
+        public async Task<IHttpResult> GetStudentsAsync(ILambdaContext context)
+        {
+            List<Student> students = await _dynamoDBContext.ScanAsync<Student>(new List<ScanCondition>()).GetRemainingAsync();
+
+            return HttpResults.Ok(students);
         }
 
         [LambdaFunction(ResourceName = "DeleteStudentFunction")]
@@ -78,7 +77,8 @@ namespace SeriesAPI
 
             instructor.PK = key;
             instructor.SK = key;
-            instructor.IndexInstructor = key;
+            instructor.GSI1PK = key;
+            instructor.GSI1SK = key;
 
             await _dynamoDBContext.SaveAsync(instructor);
 

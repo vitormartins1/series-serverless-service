@@ -37,25 +37,16 @@ Resources:
         AttributeType: S
       - AttributeName: SK
         AttributeType: S
-      - AttributeName: index-instructor
+      - AttributeName: GSI1PK
+        AttributeType: S
+      - AttributeName: GSI1SK
         AttributeType: S
       GlobalSecondaryIndexes:
-      - IndexName: all-students-of-an-instructor
+      - IndexName: GSI1
         KeySchema:
-        - AttributeName: index-instructor
+        - AttributeName: GSI1PK
           KeyType: HASH
-        - AttributeName: PK
-          KeyType: RANGE
-        Projection:
-          ProjectionType: ALL
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-      - IndexName: all-series-from-instructor-by-student
-        KeySchema:
-        - AttributeName: PK
-          KeyType: HASH
-        - AttributeName: index-instructor
+        - AttributeName: GSI1SK
           KeyType: RANGE
         Projection:
           ProjectionType: ALL
@@ -163,3 +154,27 @@ Resources:
           Properties:
             Path: /serie/{studentKey}
             Method: POST
+  GetStudentsFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: GetStudentsFunction
+      SyncedEvents:
+      - RootGet
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: GetStudentsFunction
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_GetStudentsAsync_Generated::GetStudentsAsync
+      Events:
+        RootGet:
+          Type: HttpApi
+          Properties:
+            Path: /student
+            Method: GET

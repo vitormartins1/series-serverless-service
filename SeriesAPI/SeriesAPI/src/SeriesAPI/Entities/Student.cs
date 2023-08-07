@@ -19,7 +19,10 @@ namespace SeriesAPI.Entities
         [DynamoDBProperty("username")]
         public string? Username { get; set; }
 
-        [DynamoDBProperty("index-instructor")]
-        public string? IndexInstructor { get; set; }
+        [DynamoDBProperty("GSI1PK")]
+        public string? GSI1PK { get; set; }
+        
+        [DynamoDBProperty("GSI1SK")]
+        public string? GSI1SK { get; set; }
     }
 }
