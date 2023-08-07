@@ -40,12 +40,34 @@ namespace SeriesAPI
 
             return HttpResults.Created(null, student);
         }
-        
-        [LambdaFunction(ResourceName = "GetStudentsFunction")]
-        [HttpApi(LambdaHttpMethod.Get, "/student")]
-        public async Task<IHttpResult> GetStudentsAsync(ILambdaContext context)
+
+        [LambdaFunction(ResourceName = "GetAllSeriesFromStudent")]
+        [HttpApi(LambdaHttpMethod.Get, "/student/{studentKey}/serie")]
+        public async Task<IHttpResult> GetAllSeriesFromStudentAsync(string studentKey, ILambdaContext context)
         {
-            List<Student> students = await _dynamoDBContext.ScanAsync<Student>(new List<ScanCondition>()).GetRemainingAsync();
+            List<Serie> series = await _dynamoDBContext
+                .QueryAsync<Serie>($"student#{studentKey}", QueryOperator.BeginsWith, new[] { "instructor#" }).GetRemainingAsync();
+
+            return HttpResults.Ok(series);
+        }
+
+        [LambdaFunction(ResourceName = "GetStudentByKey")]
+        [HttpApi(LambdaHttpMethod.Get, "/student/{key}")]
+        public async Task<IHttpResult> GetStudentByKeyAsync(string key, ILambdaContext context)
+        {
+            string studentKey = $"student#{key}";
+
+            Student student = await _dynamoDBContext
+                .LoadAsync<Student>(studentKey, studentKey);
+
+            return HttpResults.Ok(student);
+        }
+
+        [LambdaFunction(ResourceName = "GetAllStudentsFromInstructor")]
+        [HttpApi(LambdaHttpMethod.Get, "/instructor/{instructorKey}/student")]
+        public async Task<IHttpResult> GetStudentsAsync(string instructorKey, ILambdaContext context)
+        {
+            List<Student> students = await _dynamoDBContext.QueryAsync<Student>($"instructor#{instructorKey}", QueryOperator.BeginsWith, new[] { "student#" }).GetRemainingAsync();
 
             return HttpResults.Ok(students);
         }
@@ -85,17 +107,24 @@ namespace SeriesAPI
             return HttpResults.Created(null, instructor);
         }
 
+        [LambdaFunction(ResourceName = "GetInstructorByKey")]
+        [HttpApi(LambdaHttpMethod.Get, "/instructor/{key}")]
+        public async Task<IHttpResult> GetInstructorByKeyAsync(string key, ILambdaContext context)
+        {
+            string instructorKey = $"instructor#{key}";
+
+            Instructor instructor = await _dynamoDBContext
+                .LoadAsync<Instructor>(instructorKey, instructorKey);
+
+            return HttpResults.Ok(instructor);
+        }
 
         [LambdaFunction(ResourceName = "CreateSerieFunction")]
-        [HttpApi(LambdaHttpMethod.Post, "/serie/{studentKey}")]
+        [HttpApi(LambdaHttpMethod.Post, "/serie/{studentKey}/{instructorKey}")]
         public async Task<IHttpResult> CreateSerieAsync(
-            [FromBody] Serie serie, string studentKey, ILambdaContext context)
+            [FromBody] Serie serie, string studentKey, string instructorKey, ILambdaContext context)
         {
-            string sortKey = $"serie#{Guid.NewGuid().ToString()}";
             string pk = $"student#{studentKey}";
-
-            serie.PK = pk;
-            serie.SK = sortKey;
 
             // get count of series from the same student to make a new version of the serie
             //var request = new QueryRequest
@@ -111,11 +140,21 @@ namespace SeriesAPI
             //};
 
             List<Serie> response = await _dynamoDBContext
-                .QueryAsync<Serie>(pk, QueryOperator.BeginsWith, new[] { "serie#" }).GetRemainingAsync();
+                .QueryAsync<Serie>(pk, QueryOperator.BeginsWith, new[] { "instructor#" }).GetRemainingAsync();
 
-            int? highestVersion = response.OrderByDescending(s => s.Version).FirstOrDefault().Version;
+            Serie? highestSerie = response.OrderByDescending(s => s.Version).FirstOrDefault();
 
-            serie.Version = highestVersion + 1;
+            if (highestSerie == null)
+                serie.Version = 1;
+            else
+                serie.Version = highestSerie.Version + 1;
+
+            string sortKey = $"instructor#{instructorKey}#serie#{serie.Version}";
+
+            serie.PK = pk;
+            serie.SK = sortKey;
+            serie.GSI1PK = $"instructor#{instructorKey}";
+            serie.GSI1SK = $"student#{studentKey}#serie#{serie.Version}";
 
             await _dynamoDBContext.SaveAsync(serie);
 

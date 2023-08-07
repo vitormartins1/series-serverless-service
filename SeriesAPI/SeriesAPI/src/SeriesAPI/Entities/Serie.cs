@@ -19,13 +19,16 @@ namespace SeriesAPI.Entities
         [DynamoDBProperty("date")]
         public string? Date { get; set; }
 
-        [DynamoDBProperty("index-instructor")]
-        public string? IndexInstructor { get; set; }
-
         [DynamoDBProperty("exercices")]
         public string? Exercices { get; set; }
 
         [DynamoDBProperty("version")]
         public int? Version { get; set; }
+
+        [DynamoDBProperty("GSI1PK")]
+        public string? GSI1PK { get; set; }
+
+        [DynamoDBProperty("GSI1SK")]
+        public string? GSI1SK { get; set; }
     }
 }

@@ -2,27 +2,250 @@
 	"info": {
 		"_postman_id": "ca294fb1-8a9a-44fd-a754-378a637a2782",
 		"name": "SeriesAPI Serverless Lambda .NET 6",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "18572656"
 	},
 	"item": [
 		{
-			"name": "CreateStudent",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"Username\": \"Joel\",\r\n    \"IndexInstructor\" : \"instructor#1\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Student",
+			"item": [
+				{
+					"name": "CreateStudent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Username\": \"Joana\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/student",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"student"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": "https://tskgrks4d1.execute-api.us-east-1.amazonaws.com/student"
-			},
-			"response": []
+				{
+					"name": "GetStudentByKey",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Username\": \"Giovana\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/student/ca56425d-d67e-4ff6-a205-1a4f2d0c389b",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"student",
+								"ca56425d-d67e-4ff6-a205-1a4f2d0c389b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteStudent",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Username\": \"Joel\",\r\n    \"IndexInstructor\" : \"instructor#1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/student/System.Func`1[System.Guid]",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"student",
+								"System.Func`1[System.Guid]"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Instructor",
+			"item": [
+				{
+					"name": "GetAllStudentsFromInstructor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/instructor/515082f2-853c-4259-9994-d26639d5605f/student",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"instructor",
+								"515082f2-853c-4259-9994-d26639d5605f",
+								"student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateInstructor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Username\": \"Jairo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/instructor",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"instructor"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Serie",
+			"item": [
+				{
+					"name": "GetAllSeriesFromStudent",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Username\": \"Giovana\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/student/a634d03a-05e7-4b87-a81e-43d371aaa6bb/serie",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"student",
+								"a634d03a-05e7-4b87-a81e-43d371aaa6bb",
+								"serie"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateSerie",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Date\": \"2024-12-12\",\r\n    \"Exercices\" : \"Lista de exercicos A B C Progressao de carga\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/serie/a634d03a-05e7-4b87-a81e-43d371aaa6bb/515082f2-853c-4259-9994-d26639d5605f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"serie",
+								"a634d03a-05e7-4b87-a81e-43d371aaa6bb",
+								"515082f2-853c-4259-9994-d26639d5605f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://cuali1x439.execute-api.us-east-1.amazonaws.com",
+			"type": "string"
 		}
 	]
 }

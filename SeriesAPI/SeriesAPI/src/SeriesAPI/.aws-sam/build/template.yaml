@@ -2,29 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: This template is partially managed by Amazon.Lambda.Annotations (v1.0.0.0).
 Resources:
-  SeriesAPIFunctionsDefaultGenerated:
-    Type: AWS::Serverless::Function
-    Metadata:
-      SamResourceId: SeriesAPIFunctionsDefaultGenerated
-      SyncedEvents:
-      - RootGet
-      Tool: Amazon.Lambda.Annotations
-    Properties:
-      Runtime: dotnet6
-      CodeUri: SeriesAPIFunctionsDefaultGenerated
-      MemorySize: 256
-      Timeout: 30
-      Policies:
-      - AWSLambdaBasicExecutionRole
-      PackageType: Zip
-      Handler: SeriesAPI::SeriesAPI.Functions_Default_Generated::Default
-      Events:
-        RootGet:
-          Type: HttpApi
-          Properties:
-            Path: /
-            Method: GET
-  SeriesTable:
+  series:
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -152,18 +130,18 @@ Resources:
         RootPost:
           Type: HttpApi
           Properties:
-            Path: /serie/{studentKey}
+            Path: /serie/{studentKey}/{instructorKey}
             Method: POST
-  GetStudentsFunction:
+  GetAllStudentsFromInstructor:
     Type: AWS::Serverless::Function
     Metadata:
-      SamResourceId: GetStudentsFunction
+      SamResourceId: GetAllStudentsFromInstructor
       SyncedEvents:
       - RootGet
       Tool: Amazon.Lambda.Annotations
     Properties:
       Runtime: dotnet6
-      CodeUri: GetStudentsFunction
+      CodeUri: GetAllStudentsFromInstructor
       MemorySize: 256
       Timeout: 30
       Policies:
@@ -176,5 +154,77 @@ Resources:
         RootGet:
           Type: HttpApi
           Properties:
-            Path: /student
+            Path: /instructor/{instructorKey}/student
+            Method: GET
+  GetAllSeriesFromStudent:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: GetAllSeriesFromStudent
+      SyncedEvents:
+      - RootGet
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: GetAllSeriesFromStudent
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_GetAllSeriesFromStudentAsync_Generated::GetAllSeriesFromStudentAsync
+      Events:
+        RootGet:
+          Type: HttpApi
+          Properties:
+            Path: /student/{studentKey}/serie
+            Method: GET
+  GetStudentByKey:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: GetStudentByKey
+      SyncedEvents:
+      - RootGet
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: GetStudentByKey
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_GetStudentByKeyAsync_Generated::GetStudentByKeyAsync
+      Events:
+        RootGet:
+          Type: HttpApi
+          Properties:
+            Path: /student/{key}
+            Method: GET
+  GetInstructorByKey:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: GetInstructorByKey
+      SyncedEvents:
+      - RootGet
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: GetInstructorByKey
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_GetInstructorByKeyAsync_Generated::GetInstructorByKeyAsync
+      Events:
+        RootGet:
+          Type: HttpApi
+          Properties:
+            Path: /instructor/{key}
             Method: GET

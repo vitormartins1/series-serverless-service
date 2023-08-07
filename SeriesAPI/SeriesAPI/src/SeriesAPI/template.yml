@@ -3,7 +3,7 @@
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "This template is partially managed by Amazon.Lambda.Annotations (v1.0.0.0).",
   "Resources": {
-    "SeriesTable": {
+    "series": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "KeySchema": [
@@ -193,14 +193,14 @@
           "RootPost": {
             "Type": "HttpApi",
             "Properties": {
-              "Path": "/serie/{studentKey}",
+              "Path": "/serie/{studentKey}/{instructorKey}",
               "Method": "POST"
             }
           }
         }
       }
     },
-    "GetStudentsFunction": {
+    "GetAllStudentsFromInstructor": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
         "Tool": "Amazon.Lambda.Annotations",
@@ -227,7 +227,109 @@
           "RootGet": {
             "Type": "HttpApi",
             "Properties": {
-              "Path": "/student",
+              "Path": "/instructor/{instructorKey}/student",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "GetAllSeriesFromStudent": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
+        ],
+        "PackageType": "Zip",
+        "Handler": "SeriesAPI::SeriesAPI.Functions_GetAllSeriesFromStudentAsync_Generated::GetAllSeriesFromStudentAsync",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/student/{studentKey}/serie",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "GetStudentByKey": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
+        ],
+        "PackageType": "Zip",
+        "Handler": "SeriesAPI::SeriesAPI.Functions_GetStudentByKeyAsync_Generated::GetStudentByKeyAsync",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/student/{key}",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "GetInstructorByKey": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
+        ],
+        "PackageType": "Zip",
+        "Handler": "SeriesAPI::SeriesAPI.Functions_GetInstructorByKeyAsync_Generated::GetInstructorByKeyAsync",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/instructor/{key}",
               "Method": "GET"
             }
           }
