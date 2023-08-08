@@ -13,6 +13,7 @@ namespace SeriesAPI
             services.AddSingleton<ICalculatorService>(new CalculatorService());
 
             services.AddAWSService<IAmazonDynamoDB>();
+            services.AddSingleton<IAmazonDynamoDB, AmazonDynamoDBClient>();
             services.AddScoped<IDynamoDBContext, DynamoDBContext>();
         }
     }

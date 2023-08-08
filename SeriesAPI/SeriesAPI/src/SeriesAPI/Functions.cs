@@ -17,15 +17,15 @@ namespace SeriesAPI
 {
     public class Functions
     {
-        private ICalculatorService _calculatorService;
+        private readonly IAmazonDynamoDB _dynamoDBClient;
         private readonly IDynamoDBContext _dynamoDBContext;
 
         public Functions(
-            ICalculatorService calculatorService, 
-            IDynamoDBContext dynamoDBContext)
+            IDynamoDBContext dynamoDBContext, 
+            IAmazonDynamoDB dynamoDBClient)
         {
-            _calculatorService = calculatorService;
             _dynamoDBContext = dynamoDBContext;
+            _dynamoDBClient = dynamoDBClient;
         }
 
         [LambdaFunction(ResourceName = "CreateStudentFunction")]
@@ -65,11 +65,37 @@ namespace SeriesAPI
 
         [LambdaFunction(ResourceName = "GetAllStudentsFromInstructor")]
         [HttpApi(LambdaHttpMethod.Get, "/instructor/{instructorKey}/student")]
-        public async Task<IHttpResult> GetStudentsAsync(string instructorKey, ILambdaContext context)
+        public async Task<IHttpResult> GetAllStudentsFromInstructorAsync(string instructorKey, ILambdaContext context)
         {
-            List<Student> students = await _dynamoDBContext.QueryAsync<Student>($"instructor#{instructorKey}", QueryOperator.BeginsWith, new[] { "student#" }).GetRemainingAsync();
+            var students = _dynamoDBContext.QueryAsync<Student>(
+                $"instructor#{instructorKey}",
+                QueryOperator.BeginsWith,
+                new[] { "student#" },
+                new DynamoDBOperationConfig
+                {
+                    IndexName = "GSI1"
+                })
+            .GetRemainingAsync()
+            .Result
+            .Where(s => !s.SK.Contains("#serie#"));
 
             return HttpResults.Ok(students);
+        }
+
+        [LambdaFunction(ResourceName = "GetCurrentSerieFromStudent")]
+        [HttpApi(LambdaHttpMethod.Get, "/serie/student/{studentKey}")]
+        public async Task<IHttpResult> GetCurrentSerieFromStudentAsync(string studentKey, ILambdaContext context)
+        {
+            var serie = _dynamoDBContext.QueryAsync<Serie>(
+                $"student#{studentKey}",
+                QueryOperator.BeginsWith,
+                new[] { "instructor#" })
+            .GetRemainingAsync()
+            .Result
+            .OrderByDescending(s => s.Version)
+            .FirstOrDefault();
+
+            return HttpResults.Ok(serie);
         }
 
         [LambdaFunction(ResourceName = "DeleteStudentFunction")]
@@ -125,19 +151,6 @@ namespace SeriesAPI
             [FromBody] Serie serie, string studentKey, string instructorKey, ILambdaContext context)
         {
             string pk = $"student#{studentKey}";
-
-            // get count of series from the same student to make a new version of the serie
-            //var request = new QueryRequest
-            //{
-            //    TableName = "series",
-            //    KeyConditionExpression = "PK = :pk and begins_with(SK, :sk)",
-            //    ExpressionAttributeValues = new Dictionary<string, AttributeValue>()
-            //    {
-            //        { ":pk", new AttributeValue { S = studentKey } },
-            //        { ":sk", new AttributeValue { S = "serie#" } }
-            //    },
-            //    Select = Select.COUNT
-            //};
 
             List<Serie> response = await _dynamoDBContext
                 .QueryAsync<Serie>(pk, QueryOperator.BeginsWith, new[] { "instructor#" }).GetRemainingAsync();

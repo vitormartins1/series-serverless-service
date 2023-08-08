@@ -10,13 +10,44 @@
 			"name": "Student",
 			"item": [
 				{
+					"name": "GetAllStudentsFromInstructor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/instructor/515082f2-853c-4259-9994-d26639d5605f/student",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"instructor",
+								"515082f2-853c-4259-9994-d26639d5605f",
+								"student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "CreateStudent",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Username\": \"Joana\"\r\n}",
+							"raw": "{\r\n    \"Username\": \"Otavio\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -98,37 +129,6 @@
 			"name": "Instructor",
 			"item": [
 				{
-					"name": "GetAllStudentsFromInstructor",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/instructor/515082f2-853c-4259-9994-d26639d5605f/student",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"instructor",
-								"515082f2-853c-4259-9994-d26639d5605f",
-								"student"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "CreateInstructor",
 					"request": {
 						"method": "POST",
@@ -149,6 +149,36 @@
 							],
 							"path": [
 								"instructor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetInstructorByKey",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Username\": \"Giovana\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/instructor/515082f2-853c-4259-9994-d26639d5605f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"instructor",
+								"515082f2-853c-4259-9994-d26639d5605f"
 							]
 						}
 					},
@@ -197,7 +227,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Date\": \"2024-12-12\",\r\n    \"Exercices\" : \"Lista de exercicos A B C Progressao de carga\"\r\n}",
+							"raw": "{\r\n    \"Date\": \"2024-07-11\",\r\n    \"Exercices\" : \"Fisioterapia intravenosa\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -213,6 +243,25 @@
 								"serie",
 								"a634d03a-05e7-4b87-a81e-43d371aaa6bb",
 								"515082f2-853c-4259-9994-d26639d5605f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCurrentSerieFromStudent",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/serie/student/a634d03a-05e7-4b87-a81e-43d371aaa6bb",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"serie",
+								"student",
+								"a634d03a-05e7-4b87-a81e-43d371aaa6bb"
 							]
 						}
 					},

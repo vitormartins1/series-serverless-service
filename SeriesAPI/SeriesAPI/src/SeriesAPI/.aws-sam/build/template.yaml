@@ -149,7 +149,7 @@ Resources:
       - DynamoDBCrudPolicy:
           TableName: series
       PackageType: Zip
-      Handler: SeriesAPI::SeriesAPI.Functions_GetStudentsAsync_Generated::GetStudentsAsync
+      Handler: SeriesAPI::SeriesAPI.Functions_GetAllStudentsFromInstructorAsync_Generated::GetAllStudentsFromInstructorAsync
       Events:
         RootGet:
           Type: HttpApi
@@ -227,4 +227,28 @@ Resources:
           Type: HttpApi
           Properties:
             Path: /instructor/{key}
+            Method: GET
+  GetCurrentSerieFromStudent:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: GetCurrentSerieFromStudent
+      SyncedEvents:
+      - RootGet
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: GetCurrentSerieFromStudent
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_GetCurrentSerieFromStudentAsync_Generated::GetCurrentSerieFromStudentAsync
+      Events:
+        RootGet:
+          Type: HttpApi
+          Properties:
+            Path: /serie/student/{studentKey}
             Method: GET
