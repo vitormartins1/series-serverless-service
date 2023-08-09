@@ -106,7 +106,7 @@ Resources:
         RootDelete:
           Type: HttpApi
           Properties:
-            Path: /student/{key}
+            Path: /student/{studentKey}
             Method: DELETE
   CreateSerieFunction:
     Type: AWS::Serverless::Function
@@ -130,7 +130,7 @@ Resources:
         RootPost:
           Type: HttpApi
           Properties:
-            Path: /serie/{studentKey}/{instructorKey}
+            Path: /serie/student/{studentKey}/instructor/{instructorKey}
             Method: POST
   GetAllStudentsFromInstructor:
     Type: AWS::Serverless::Function
@@ -154,7 +154,7 @@ Resources:
         RootGet:
           Type: HttpApi
           Properties:
-            Path: /instructor/{instructorKey}/student
+            Path: /student/instructor/{instructorKey}
             Method: GET
   GetAllSeriesFromStudent:
     Type: AWS::Serverless::Function
@@ -178,7 +178,7 @@ Resources:
         RootGet:
           Type: HttpApi
           Properties:
-            Path: /student/{studentKey}/serie
+            Path: /serie/all/student/{studentKey}
             Method: GET
   GetStudentByKey:
     Type: AWS::Serverless::Function
@@ -202,7 +202,7 @@ Resources:
         RootGet:
           Type: HttpApi
           Properties:
-            Path: /student/{key}
+            Path: /student/{studentKey}
             Method: GET
   GetInstructorByKey:
     Type: AWS::Serverless::Function
@@ -226,7 +226,7 @@ Resources:
         RootGet:
           Type: HttpApi
           Properties:
-            Path: /instructor/{key}
+            Path: /instructor/{instructorKey}
             Method: GET
   GetCurrentSerieFromStudent:
     Type: AWS::Serverless::Function
@@ -250,5 +250,53 @@ Resources:
         RootGet:
           Type: HttpApi
           Properties:
-            Path: /serie/student/{studentKey}
+            Path: /serie/current/student/{studentKey}
+            Method: GET
+  GetSerieByVersion:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: GetSerieByVersion
+      SyncedEvents:
+      - RootGet
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: GetSerieByVersion
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_GetSerieByKeyAsync_Generated::GetSerieByKeyAsync
+      Events:
+        RootGet:
+          Type: HttpApi
+          Properties:
+            Path: /serie/{serieVersion}/student/{studentKey}/instructor/{instructorKey}/
+            Method: GET
+  GetAllSeriesFromStudentAndInstructor:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: GetAllSeriesFromStudentAndInstructor
+      SyncedEvents:
+      - RootGet
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: GetAllSeriesFromStudentAndInstructor
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_GetAllSeriesFromStudentAndInstructorAsync_Generated::GetAllSeriesFromStudentAndInstructorAsync
+      Events:
+        RootGet:
+          Type: HttpApi
+          Properties:
+            Path: /serie/student/{studentKey}/instructor/{instructorKey}
             Method: GET

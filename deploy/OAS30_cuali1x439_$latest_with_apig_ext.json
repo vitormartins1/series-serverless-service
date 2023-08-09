@@ -1,0 +1,235 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "SeriesAPI",
+    "version" : "1.0"
+  },
+  "servers" : [ {
+    "url" : "https://cuali1x439.execute-api.us-east-1.amazonaws.com/{basePath}",
+    "variables" : {
+      "basePath" : {
+        "default" : ""
+      }
+    }
+  } ],
+  "tags" : [ {
+    "name" : "aws:cloudformation:stack-name",
+    "x-amazon-apigateway-tag-value" : "SeriesAPI"
+  }, {
+    "name" : "aws:cloudformation:logical-id",
+    "x-amazon-apigateway-tag-value" : "ServerlessHttpApi"
+  }, {
+    "name" : "aws:cloudformation:stack-id",
+    "x-amazon-apigateway-tag-value" : "arn:aws:cloudformation:us-east-1:868588846034:stack/SeriesAPI/ae7e4b70-34ed-11ee-bd39-1204780720eb"
+  }, {
+    "name" : "httpapi:createdBy",
+    "x-amazon-apigateway-tag-value" : "SAM"
+  } ],
+  "paths" : {
+    "/student/{studentKey}" : {
+      "get" : {
+        "responses" : {
+          "default" : {
+            "description" : "Default response for GET /student/{studentKey}"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "payloadFormatVersion" : "2.0",
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:868588846034:function:SeriesAPI-GetStudentByKey-N9O0OdbWyvQ9/invocations",
+          "connectionType" : "INTERNET"
+        }
+      },
+      "delete" : {
+        "responses" : {
+          "default" : {
+            "description" : "Default response for DELETE /student/{studentKey}"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "payloadFormatVersion" : "2.0",
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:868588846034:function:SeriesAPI-DeleteStudentFunction-jSeMgpID1Bqk/invocations",
+          "connectionType" : "INTERNET"
+        }
+      },
+      "parameters" : [ {
+        "name" : "studentKey",
+        "in" : "path",
+        "description" : "Generated path parameter for studentKey",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/instructor/{instructorKey}" : {
+      "get" : {
+        "responses" : {
+          "default" : {
+            "description" : "Default response for GET /instructor/{instructorKey}"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "payloadFormatVersion" : "2.0",
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:868588846034:function:SeriesAPI-GetInstructorByKey-l5MvtlyPXg3W/invocations",
+          "connectionType" : "INTERNET"
+        }
+      },
+      "parameters" : [ {
+        "name" : "instructorKey",
+        "in" : "path",
+        "description" : "Generated path parameter for instructorKey",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/serie/current/student/{studentKey}" : {
+      "get" : {
+        "responses" : {
+          "default" : {
+            "description" : "Default response for GET /serie/current/student/{studentKey}"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "payloadFormatVersion" : "2.0",
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:868588846034:function:SeriesAPI-GetCurrentSerieFromStudent-wrNv8KON9WC3/invocations",
+          "connectionType" : "INTERNET"
+        }
+      },
+      "parameters" : [ {
+        "name" : "studentKey",
+        "in" : "path",
+        "description" : "Generated path parameter for studentKey",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/serie/student/{studentKey}" : {
+      "get" : {
+        "responses" : {
+          "default" : {
+            "description" : "Default response for GET /serie/student/{studentKey}"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "payloadFormatVersion" : "2.0",
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:868588846034:function:SeriesAPI-GetAllSeriesFromStudent-qgDJEbdQ4C0v/invocations",
+          "connectionType" : "INTERNET"
+        }
+      },
+      "parameters" : [ {
+        "name" : "studentKey",
+        "in" : "path",
+        "description" : "Generated path parameter for studentKey",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/student/instructor/{instructorKey}" : {
+      "get" : {
+        "responses" : {
+          "default" : {
+            "description" : "Default response for GET /student/instructor/{instructorKey}"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "payloadFormatVersion" : "2.0",
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:868588846034:function:SeriesAPI-GetAllStudentsFromInstructor-zW8TCvL6ZOeA/invocations",
+          "connectionType" : "INTERNET"
+        }
+      },
+      "parameters" : [ {
+        "name" : "instructorKey",
+        "in" : "path",
+        "description" : "Generated path parameter for instructorKey",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/instructor" : {
+      "post" : {
+        "responses" : {
+          "default" : {
+            "description" : "Default response for POST /instructor"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "payloadFormatVersion" : "2.0",
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:868588846034:function:SeriesAPI-CreateInstructorFunction-PUCkqJBrtpSk/invocations",
+          "connectionType" : "INTERNET"
+        }
+      }
+    },
+    "/serie/student/{studentKey}/instructor/{instructorKey}" : {
+      "post" : {
+        "responses" : {
+          "default" : {
+            "description" : "Default response for POST /serie/student/{studentKey}/instructor/{instructorKey}"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "payloadFormatVersion" : "2.0",
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:868588846034:function:SeriesAPI-CreateSerieFunction-CHAmGT6Tmjgw/invocations",
+          "connectionType" : "INTERNET"
+        }
+      },
+      "parameters" : [ {
+        "name" : "studentKey",
+        "in" : "path",
+        "description" : "Generated path parameter for studentKey",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      }, {
+        "name" : "instructorKey",
+        "in" : "path",
+        "description" : "Generated path parameter for instructorKey",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/student" : {
+      "post" : {
+        "responses" : {
+          "default" : {
+            "description" : "Default response for POST /student"
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "payloadFormatVersion" : "2.0",
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:868588846034:function:SeriesAPI-CreateStudentFunction-2aCryUE0iDzI/invocations",
+          "connectionType" : "INTERNET"
+        }
+      }
+    }
+  },
+  "x-amazon-apigateway-importexport-version" : "1.0"
+}

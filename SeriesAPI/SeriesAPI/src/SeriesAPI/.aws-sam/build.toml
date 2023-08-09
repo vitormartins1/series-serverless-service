@@ -8,7 +8,7 @@ architecture = "x86_64"
 handler = "SeriesAPI::SeriesAPI.Functions_Default_Generated::Default"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["GetAllStudentsFromInstructor", "GetAllSeriesFromStudent", "GetStudentByKey", "GetInstructorByKey", "GetCurrentSerieFromStudent"]
+functions = ["GetAllStudentsFromInstructor", "GetAllSeriesFromStudent", "GetStudentByKey", "GetInstructorByKey", "GetCurrentSerieFromStudent", "GetSerieByVersion", "GetAllSeriesFromStudentAndInstructor"]
 
 [function_build_definitions.cd1d94b7-b7de-483d-b7c2-2ceec764d45e.metadata]
 Tool = "Amazon.Lambda.Annotations"
