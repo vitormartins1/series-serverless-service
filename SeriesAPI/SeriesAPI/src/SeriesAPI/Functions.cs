@@ -206,7 +206,6 @@ namespace SeriesAPI
             return HttpResults.Created(null, serie);
         }
 
-
         [LambdaFunction(ResourceName = "GetAllStudents")]
         [HttpApi(LambdaHttpMethod.Get, "/student")]
         public async Task<IHttpResult> GetAllStudentsAsync(ILambdaContext context)
@@ -218,6 +217,19 @@ namespace SeriesAPI
             List<Student> students = table.Where(s => s.SK.Contains("student#")).ToList();
 
             return HttpResults.Ok(students);
+        }
+
+        [LambdaFunction(ResourceName = "GetAllInstructors")]
+        [HttpApi(LambdaHttpMethod.Get, "/instructor")]
+        public async Task<IHttpResult> GetAllInstructorsAsync(ILambdaContext context)
+        {
+            List<Instructor> table = await _dynamoDBContext
+                .ScanAsync<Instructor>(new List<ScanCondition>())
+                .GetRemainingAsync();
+
+            List<Instructor> instructors = table.Where(s => s.PK.Contains("instructor#")).ToList();
+
+            return HttpResults.Ok(instructors);
         }
     }
 }

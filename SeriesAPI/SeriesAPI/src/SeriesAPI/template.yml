@@ -471,6 +471,40 @@
           }
         }
       }
+    },
+    "GetAllInstructors": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
+        ],
+        "PackageType": "Zip",
+        "Handler": "SeriesAPI::SeriesAPI.Functions_GetAllInstructorsAsync_Generated::GetAllInstructorsAsync",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/instructor",
+              "Method": "GET"
+            }
+          }
+        }
+      }
     }
   }
 }
