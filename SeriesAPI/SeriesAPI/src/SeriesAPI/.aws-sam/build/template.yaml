@@ -36,102 +36,6 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-  CreateStudentFunction:
-    Type: AWS::Serverless::Function
-    Metadata:
-      SamResourceId: CreateStudentFunction
-      SyncedEvents:
-      - RootPost
-      Tool: Amazon.Lambda.Annotations
-    Properties:
-      Runtime: dotnet6
-      CodeUri: CreateStudentFunction
-      MemorySize: 256
-      Timeout: 30
-      Policies:
-      - AWSLambdaBasicExecutionRole
-      - DynamoDBCrudPolicy:
-          TableName: series
-      PackageType: Zip
-      Handler: SeriesAPI::SeriesAPI.Functions_CreateStudentAsync_Generated::CreateStudentAsync
-      Events:
-        RootPost:
-          Type: HttpApi
-          Properties:
-            Path: /student
-            Method: POST
-  CreateInstructorFunction:
-    Type: AWS::Serverless::Function
-    Metadata:
-      SamResourceId: CreateInstructorFunction
-      SyncedEvents:
-      - RootPost
-      Tool: Amazon.Lambda.Annotations
-    Properties:
-      Runtime: dotnet6
-      CodeUri: CreateInstructorFunction
-      MemorySize: 256
-      Timeout: 30
-      Policies:
-      - AWSLambdaBasicExecutionRole
-      - DynamoDBCrudPolicy:
-          TableName: series
-      PackageType: Zip
-      Handler: SeriesAPI::SeriesAPI.Functions_CreateInstructorAsync_Generated::CreateInstructorAsync
-      Events:
-        RootPost:
-          Type: HttpApi
-          Properties:
-            Path: /instructor
-            Method: POST
-  DeleteStudentFunction:
-    Type: AWS::Serverless::Function
-    Metadata:
-      SamResourceId: DeleteStudentFunction
-      SyncedEvents:
-      - RootDelete
-      Tool: Amazon.Lambda.Annotations
-    Properties:
-      Runtime: dotnet6
-      CodeUri: DeleteStudentFunction
-      MemorySize: 256
-      Timeout: 30
-      Policies:
-      - AWSLambdaBasicExecutionRole
-      - DynamoDBCrudPolicy:
-          TableName: series
-      PackageType: Zip
-      Handler: SeriesAPI::SeriesAPI.Functions_DeleteStudentAsync_Generated::DeleteStudentAsync
-      Events:
-        RootDelete:
-          Type: HttpApi
-          Properties:
-            Path: /student/{studentKey}
-            Method: DELETE
-  CreateSerieFunction:
-    Type: AWS::Serverless::Function
-    Metadata:
-      SamResourceId: CreateSerieFunction
-      SyncedEvents:
-      - RootPost
-      Tool: Amazon.Lambda.Annotations
-    Properties:
-      Runtime: dotnet6
-      CodeUri: CreateSerieFunction
-      MemorySize: 256
-      Timeout: 30
-      Policies:
-      - AWSLambdaBasicExecutionRole
-      - DynamoDBCrudPolicy:
-          TableName: series
-      PackageType: Zip
-      Handler: SeriesAPI::SeriesAPI.Functions_CreateSerieAsync_Generated::CreateSerieAsync
-      Events:
-        RootPost:
-          Type: HttpApi
-          Properties:
-            Path: /serie/student/{studentKey}/instructor/{instructorKey}
-            Method: POST
   GetAllStudentsFromInstructor:
     Type: AWS::Serverless::Function
     Metadata:
@@ -274,7 +178,7 @@ Resources:
         RootGet:
           Type: HttpApi
           Properties:
-            Path: /serie/{serieVersion}/student/{studentKey}/instructor/{instructorKey}/
+            Path: /serie/{serieVersion}/student/{studentKey}/instructor/{instructorKey}
             Method: GET
   GetAllSeriesFromStudentAndInstructor:
     Type: AWS::Serverless::Function
@@ -299,4 +203,124 @@ Resources:
           Type: HttpApi
           Properties:
             Path: /serie/student/{studentKey}/instructor/{instructorKey}
+            Method: GET
+  CreateStudent:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: CreateStudent
+      SyncedEvents:
+      - RootPost
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: CreateStudent
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_CreateStudentAsync_Generated::CreateStudentAsync
+      Events:
+        RootPost:
+          Type: HttpApi
+          Properties:
+            Path: /student
+            Method: POST
+  DeleteStudent:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: DeleteStudent
+      SyncedEvents:
+      - RootDelete
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: DeleteStudent
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_DeleteStudentAsync_Generated::DeleteStudentAsync
+      Events:
+        RootDelete:
+          Type: HttpApi
+          Properties:
+            Path: /student/{studentKey}
+            Method: DELETE
+  CreateInstructor:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: CreateInstructor
+      SyncedEvents:
+      - RootPost
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: CreateInstructor
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_CreateInstructorAsync_Generated::CreateInstructorAsync
+      Events:
+        RootPost:
+          Type: HttpApi
+          Properties:
+            Path: /instructor
+            Method: POST
+  CreateSerie:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: CreateSerie
+      SyncedEvents:
+      - RootPost
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: CreateSerie
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_CreateSerieAsync_Generated::CreateSerieAsync
+      Events:
+        RootPost:
+          Type: HttpApi
+          Properties:
+            Path: /serie/student/{studentKey}/instructor/{instructorKey}
+            Method: POST
+  GetAllStudents:
+    Type: AWS::Serverless::Function
+    Metadata:
+      SamResourceId: GetAllStudents
+      SyncedEvents:
+      - RootGet
+      Tool: Amazon.Lambda.Annotations
+    Properties:
+      Runtime: dotnet6
+      CodeUri: GetAllStudents
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - DynamoDBCrudPolicy:
+          TableName: series
+      PackageType: Zip
+      Handler: SeriesAPI::SeriesAPI.Functions_GetAllStudentsAsync_Generated::GetAllStudentsAsync
+      Events:
+        RootGet:
+          Type: HttpApi
+          Properties:
+            Path: /student
             Method: GET

@@ -64,142 +64,6 @@
         }
       }
     },
-    "CreateStudentFunction": {
-      "Type": "AWS::Serverless::Function",
-      "Metadata": {
-        "Tool": "Amazon.Lambda.Annotations",
-        "SyncedEvents": [
-          "RootPost"
-        ]
-      },
-      "Properties": {
-        "Runtime": "dotnet6",
-        "CodeUri": ".",
-        "MemorySize": 256,
-        "Timeout": 30,
-        "Policies": [
-          "AWSLambdaBasicExecutionRole",
-          {
-            "DynamoDBCrudPolicy": {
-              "TableName": "series"
-            }
-          }
-        ],
-        "PackageType": "Zip",
-        "Handler": "SeriesAPI::SeriesAPI.Functions_CreateStudentAsync_Generated::CreateStudentAsync",
-        "Events": {
-          "RootPost": {
-            "Type": "HttpApi",
-            "Properties": {
-              "Path": "/student",
-              "Method": "POST"
-            }
-          }
-        }
-      }
-    },
-    "CreateInstructorFunction": {
-      "Type": "AWS::Serverless::Function",
-      "Metadata": {
-        "Tool": "Amazon.Lambda.Annotations",
-        "SyncedEvents": [
-          "RootPost"
-        ]
-      },
-      "Properties": {
-        "Runtime": "dotnet6",
-        "CodeUri": ".",
-        "MemorySize": 256,
-        "Timeout": 30,
-        "Policies": [
-          "AWSLambdaBasicExecutionRole",
-          {
-            "DynamoDBCrudPolicy": {
-              "TableName": "series"
-            }
-          }
-        ],
-        "PackageType": "Zip",
-        "Handler": "SeriesAPI::SeriesAPI.Functions_CreateInstructorAsync_Generated::CreateInstructorAsync",
-        "Events": {
-          "RootPost": {
-            "Type": "HttpApi",
-            "Properties": {
-              "Path": "/instructor",
-              "Method": "POST"
-            }
-          }
-        }
-      }
-    },
-    "DeleteStudentFunction": {
-      "Type": "AWS::Serverless::Function",
-      "Metadata": {
-        "Tool": "Amazon.Lambda.Annotations",
-        "SyncedEvents": [
-          "RootDelete"
-        ]
-      },
-      "Properties": {
-        "Runtime": "dotnet6",
-        "CodeUri": ".",
-        "MemorySize": 256,
-        "Timeout": 30,
-        "Policies": [
-          "AWSLambdaBasicExecutionRole",
-          {
-            "DynamoDBCrudPolicy": {
-              "TableName": "series"
-            }
-          }
-        ],
-        "PackageType": "Zip",
-        "Handler": "SeriesAPI::SeriesAPI.Functions_DeleteStudentAsync_Generated::DeleteStudentAsync",
-        "Events": {
-          "RootDelete": {
-            "Type": "HttpApi",
-            "Properties": {
-              "Path": "/student/{studentKey}",
-              "Method": "DELETE"
-            }
-          }
-        }
-      }
-    },
-    "CreateSerieFunction": {
-      "Type": "AWS::Serverless::Function",
-      "Metadata": {
-        "Tool": "Amazon.Lambda.Annotations",
-        "SyncedEvents": [
-          "RootPost"
-        ]
-      },
-      "Properties": {
-        "Runtime": "dotnet6",
-        "CodeUri": ".",
-        "MemorySize": 256,
-        "Timeout": 30,
-        "Policies": [
-          "AWSLambdaBasicExecutionRole",
-          {
-            "DynamoDBCrudPolicy": {
-              "TableName": "series"
-            }
-          }
-        ],
-        "PackageType": "Zip",
-        "Handler": "SeriesAPI::SeriesAPI.Functions_CreateSerieAsync_Generated::CreateSerieAsync",
-        "Events": {
-          "RootPost": {
-            "Type": "HttpApi",
-            "Properties": {
-              "Path": "/serie/student/{studentKey}/instructor/{instructorKey}",
-              "Method": "POST"
-            }
-          }
-        }
-      }
-    },
     "GetAllStudentsFromInstructor": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
@@ -397,7 +261,7 @@
           "RootGet": {
             "Type": "HttpApi",
             "Properties": {
-              "Path": "/serie/{serieVersion}/student/{studentKey}/instructor/{instructorKey}/",
+              "Path": "/serie/{serieVersion}/student/{studentKey}/instructor/{instructorKey}",
               "Method": "GET"
             }
           }
@@ -418,7 +282,12 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Policies": [
-          "AWSLambdaBasicExecutionRole"
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
         ],
         "PackageType": "Zip",
         "Handler": "SeriesAPI::SeriesAPI.Functions_GetAllSeriesFromStudentAndInstructorAsync_Generated::GetAllSeriesFromStudentAndInstructorAsync",
@@ -427,6 +296,176 @@
             "Type": "HttpApi",
             "Properties": {
               "Path": "/serie/student/{studentKey}/instructor/{instructorKey}",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "CreateStudent": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootPost"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
+        ],
+        "PackageType": "Zip",
+        "Handler": "SeriesAPI::SeriesAPI.Functions_CreateStudentAsync_Generated::CreateStudentAsync",
+        "Events": {
+          "RootPost": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/student",
+              "Method": "POST"
+            }
+          }
+        }
+      }
+    },
+    "DeleteStudent": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootDelete"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
+        ],
+        "PackageType": "Zip",
+        "Handler": "SeriesAPI::SeriesAPI.Functions_DeleteStudentAsync_Generated::DeleteStudentAsync",
+        "Events": {
+          "RootDelete": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/student/{studentKey}",
+              "Method": "DELETE"
+            }
+          }
+        }
+      }
+    },
+    "CreateInstructor": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootPost"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
+        ],
+        "PackageType": "Zip",
+        "Handler": "SeriesAPI::SeriesAPI.Functions_CreateInstructorAsync_Generated::CreateInstructorAsync",
+        "Events": {
+          "RootPost": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/instructor",
+              "Method": "POST"
+            }
+          }
+        }
+      }
+    },
+    "CreateSerie": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootPost"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
+        ],
+        "PackageType": "Zip",
+        "Handler": "SeriesAPI::SeriesAPI.Functions_CreateSerieAsync_Generated::CreateSerieAsync",
+        "Events": {
+          "RootPost": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/serie/student/{studentKey}/instructor/{instructorKey}",
+              "Method": "POST"
+            }
+          }
+        }
+      }
+    },
+    "GetAllStudents": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": "series"
+            }
+          }
+        ],
+        "PackageType": "Zip",
+        "Handler": "SeriesAPI::SeriesAPI.Functions_GetAllStudentsAsync_Generated::GetAllStudentsAsync",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/student",
               "Method": "GET"
             }
           }

@@ -8,7 +8,7 @@ architecture = "x86_64"
 handler = "SeriesAPI::SeriesAPI.Functions_Default_Generated::Default"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["GetAllStudentsFromInstructor", "GetAllSeriesFromStudent", "GetStudentByKey", "GetInstructorByKey", "GetCurrentSerieFromStudent", "GetSerieByVersion", "GetAllSeriesFromStudentAndInstructor"]
+functions = ["GetAllStudentsFromInstructor", "GetAllSeriesFromStudent", "GetStudentByKey", "GetInstructorByKey", "GetCurrentSerieFromStudent", "GetSerieByVersion", "GetAllSeriesFromStudentAndInstructor", "GetAllStudents"]
 
 [function_build_definitions.cd1d94b7-b7de-483d-b7c2-2ceec764d45e.metadata]
 Tool = "Amazon.Lambda.Annotations"
@@ -21,7 +21,7 @@ architecture = "x86_64"
 handler = "SeriesAPI::SeriesAPI.Functions_CreateStudentAsync_Generated::CreateStudentAsync"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["CreateStudentFunction", "CreateInstructorFunction", "CreateSerieFunction"]
+functions = ["CreateStudent", "CreateInstructor", "CreateSerie"]
 
 [function_build_definitions.3cc27d51-4b92-4d84-aeee-f61fb06d7690.metadata]
 Tool = "Amazon.Lambda.Annotations"
@@ -34,7 +34,7 @@ architecture = "x86_64"
 handler = "SeriesAPI::SeriesAPI.Functions_DeleteStudentAsync_Generated::DeleteStudentAsync"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["DeleteStudentFunction"]
+functions = ["DeleteStudent"]
 
 [function_build_definitions.63154fa1-2550-4c97-a359-04450364bdd8.metadata]
 Tool = "Amazon.Lambda.Annotations"

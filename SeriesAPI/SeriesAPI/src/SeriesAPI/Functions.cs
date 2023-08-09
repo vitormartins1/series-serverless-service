@@ -28,7 +28,7 @@ namespace SeriesAPI
             _dynamoDBClient = dynamoDBClient;
         }
 
-        [LambdaFunction(ResourceName = "CreateStudentFunction")]
+        [LambdaFunction(ResourceName = "CreateStudent")]
         [HttpApi(LambdaHttpMethod.Post, "/student")]
         public async Task<IHttpResult> CreateStudentAsync([FromBody] Student student, ILambdaContext context)
         {
@@ -98,7 +98,7 @@ namespace SeriesAPI
             return HttpResults.Ok(serie);
         }
 
-        [LambdaFunction(ResourceName = "DeleteStudentFunction")]
+        [LambdaFunction(ResourceName = "DeleteStudent")]
         [HttpApi(LambdaHttpMethod.Delete, "/student/{studentKey}")]
         public async Task<IHttpResult> DeleteStudentAsync(string studentKey, ILambdaContext context)
         {
@@ -117,7 +117,7 @@ namespace SeriesAPI
             return HttpResults.NotFound();
         }
 
-        [LambdaFunction(ResourceName = "CreateInstructorFunction")]
+        [LambdaFunction(ResourceName = "CreateInstructor")]
         [HttpApi(LambdaHttpMethod.Post, "/instructor")]
         public async Task<IHttpResult> CreateInstructorAsync([FromBody] Instructor instructor, ILambdaContext context)
         {
@@ -146,7 +146,7 @@ namespace SeriesAPI
         }
 
         [LambdaFunction(ResourceName = "GetSerieByVersion")]
-        [HttpApi(LambdaHttpMethod.Get, "/serie/{serieVersion}/student/{studentKey}/instructor/{instructorKey}/")]
+        [HttpApi(LambdaHttpMethod.Get, "/serie/{serieVersion}/student/{studentKey}/instructor/{instructorKey}")]
         public async Task<IHttpResult> GetSerieByKeyAsync(int serieVersion, string studentKey, string instructorKey, ILambdaContext context)
         {
             List<Serie> series = await _dynamoDBContext.QueryAsync<Serie>(
@@ -164,7 +164,7 @@ namespace SeriesAPI
         [HttpApi(LambdaHttpMethod.Get, "/serie/student/{studentKey}/instructor/{instructorKey}")]
         public async Task<IHttpResult> GetAllSeriesFromStudentAndInstructorAsync(string studentKey, string instructorKey, ILambdaContext context)
         {
-            var students = await _dynamoDBContext.QueryAsync<Student>(
+            var series = await _dynamoDBContext.QueryAsync<Serie>(
                 $"instructor#{instructorKey}",
                 QueryOperator.BeginsWith,
                 new[] { $"student#{studentKey}#serie#" },
@@ -174,10 +174,10 @@ namespace SeriesAPI
                 })
             .GetRemainingAsync();
 
-            return HttpResults.Ok(students);
+            return HttpResults.Ok(series);
         }
 
-        [LambdaFunction(ResourceName = "CreateSerieFunction")]
+        [LambdaFunction(ResourceName = "CreateSerie")]
         [HttpApi(LambdaHttpMethod.Post, "/serie/student/{studentKey}/instructor/{instructorKey}")]
         public async Task<IHttpResult> CreateSerieAsync(
             [FromBody] Serie serie, string studentKey, string instructorKey, ILambdaContext context)
@@ -204,6 +204,20 @@ namespace SeriesAPI
             await _dynamoDBContext.SaveAsync(serie);
 
             return HttpResults.Created(null, serie);
+        }
+
+
+        [LambdaFunction(ResourceName = "GetAllStudents")]
+        [HttpApi(LambdaHttpMethod.Get, "/student")]
+        public async Task<IHttpResult> GetAllStudentsAsync(ILambdaContext context)
+        {
+            List<Student> table = await _dynamoDBContext
+                .ScanAsync<Student>(new List<ScanCondition>())
+                .GetRemainingAsync();
+
+            List<Student> students = table.Where(s => s.SK.Contains("student#")).ToList();
+
+            return HttpResults.Ok(students);
         }
     }
 }
