@@ -41,6 +41,35 @@
 					"response": []
 				},
 				{
+					"name": "GetAllStudents",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/student",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "CreateStudent",
 					"request": {
 						"method": "POST",
@@ -179,6 +208,35 @@
 							"path": [
 								"instructor",
 								"515082f2-853c-4259-9994-d26639d5605f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllInstructors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/instructor",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"instructor"
 							]
 						}
 					},
